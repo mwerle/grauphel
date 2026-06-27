@@ -9,16 +9,7 @@
 
   <div id="app-settings">
     <div id="app-settings-header">
-      <button type="button" class="settings-button"></button>
-    </div>
-    <div id="app-settings-content" style="display: none;">
-      <ul>
-        <li><a href="<?php p($_['urlGen']->linkToRoute('grauphel.gui.index')); ?>">Info and stats</a></li>
-      <?php if ($_['isLoggedIn']) { ?>
-        <li><a href="<?php p($_['urlGen']->linkToRoute('grauphel.gui.tokens')); ?>">Manage access tokens</a></li>
-        <li><a href="<?php p($_['urlGen']->linkToRoute('grauphel.gui.database')); ?>">Manage database</a></li>
-      <?php } ?>
-      </ul>
+      <a href="<?php p($_['urlGen']->linkToRoute('grauphel.gui.settings')); ?>" class="settings-button" aria-label="Grauphel settings">⚙ Settings</a>
     </div>
   </div>
 </div>

@@ -123,8 +123,4 @@ $(document).ready(function() {
     window.onbeforeunload = function(e) {
         OC.grauphel.executeAllTasks();
     };
-
-    $('.settings-button').on('click', function() {
-        $('#app-settings-content').toggle();
-    });
 });

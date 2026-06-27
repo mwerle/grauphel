@@ -257,6 +257,27 @@ class GuiController extends Controller
     }
 
     /**
+     * Show the app settings page
+     *
+     * @NoAdminRequired
+     * @NoCSRFRequired
+     */
+    public function settings()
+    {
+        $res = new TemplateResponse('grauphel', 'settings');
+        $res->setParams(
+            array(
+                'isLoggedIn' => $this->user !== null,
+            )
+        );
+        $this->addGlobalVars($res);
+        $this->addNavigation($res, null);
+        $this->addStats($res);
+
+        return $res;
+    }
+
+    /**
      * Allow the user to clear his database
      *
      * @NoAdminRequired
@@ -271,6 +292,7 @@ class GuiController extends Controller
                 'requesttoken' => '',
             )
         );
+        $this->addGlobalVars($res);
         $this->addNavigation($res, null);
         $this->addStats($res);
 
