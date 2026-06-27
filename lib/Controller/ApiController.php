@@ -319,9 +319,9 @@ class ApiController extends Controller
             }
 
             $this->notes->saveSyncData($syncdata);
-            $db->commit();
+            $this->db->commit();
         } catch (\DatabaseException $e) {
-            $db->rollBack();
+            $this->db->rollBack();
             throw $e;
         }
     }
