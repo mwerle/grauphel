@@ -34,9 +34,9 @@ class TokenStorage
      */
     protected $db;
 
-    public function __construct()
+    public function __construct(\OCP\IDBConnection $db)
     {
-        $this->db = \OC::$server->getDatabaseConnection();
+        $this->db = $db;
     }
 
     /**

@@ -9,6 +9,7 @@ use OCA\Grauphel\Search\QueryParser;
 use OCA\Grauphel\Storage\NoteStorage;
 
 use OCP\IL10N;
+use OCP\IDBConnection;
 use OCP\IUser;
 use OCP\IURLGenerator;
 use OCP\Search\IProvider;
@@ -20,11 +21,13 @@ class Provider implements IProvider
 {
     private IL10N $l10n;
     private IURLGenerator $url;
+    private IDBConnection $db;
 
-    public function __construct(IL10N $l10n, IURLGenerator $urlGenerator)
+    public function __construct(IL10N $l10n, IURLGenerator $urlGenerator, IDBConnection $db)
     {
         $this->l10n = $l10n;
         $this->url = $urlGenerator;
+        $this->db = $db;
     }
 
     public function getId(): string
@@ -48,7 +51,7 @@ class Provider implements IProvider
 
     public function search(IUser $user, ISearchQuery $query): SearchResult
     {
-        $notes = new NoteStorage($this->url);
+        $notes = new NoteStorage($this->url, $this->db);
         $notes->setUsername($user->getUID());
 
         $qp = new QueryParser();

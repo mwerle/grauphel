@@ -37,17 +37,23 @@ use \OCA\Grauphel\Response\ErrorResponse;
 class ApiController extends Controller
 {
     /**
+     * @var \OCP\IDBConnection
+     */
+    protected $db;
+
+    /**
      * constructor of the controller
      *
      * @param string   $appName Name of the app
      * @param IRequest $request Instance of the request
      */
-    public function __construct($appName, \OCP\IRequest $request, $user)
+    public function __construct($appName, \OCP\IRequest $request, $user, \OCP\IDBConnection $db)
     {
         parent::__construct($appName, $request);
         $this->user  = $user;
+        $this->db = $db;
         $this->deps  = Dependencies::get();
-        $this->notes = new NoteStorage($this->deps->urlGen);
+        $this->notes = new NoteStorage($this->deps->urlGen, $this->db);
     }
 
     /**
@@ -294,8 +300,7 @@ class ApiController extends Controller
         }
 
         //update
-        $db = \OC::$server->getDatabaseConnection();
-        $db->beginTransaction();
+        $this->db->beginTransaction();
         try {
             ++$syncdata->latestSyncRevision;
             foreach ($arPut['note-changes'] as $noteUpdate) {

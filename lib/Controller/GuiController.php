@@ -30,16 +30,28 @@ use \OCP\AppFramework\Http\TemplateResponse;
 class GuiController extends Controller
 {
     /**
+     * @var \OCP\IDateTimeFormatter
+     */
+    protected $dateFormatter;
+
+    /**
+     * @var \OCP\IDBConnection
+     */
+    protected $db;
+
+    /**
      * constructor of the controller
      *
      * @param string   $appName Name of the app
      * @param IRequest $request Instance of the request
      */
-    public function __construct($appName, \OCP\IRequest $request, $user, $urlGen)
+    public function __construct($appName, \OCP\IRequest $request, $user, $urlGen, \OCP\IDateTimeFormatter $dateFormatter, \OCP\IDBConnection $db)
     {
         parent::__construct($appName, $request);
         $this->user   = $user;
         $this->urlGen = $urlGen;
+        $this->dateFormatter = $dateFormatter;
+        $this->db = $db;
     }
 
     /**
@@ -227,7 +239,7 @@ class GuiController extends Controller
      */
     public function tokens()
     {
-        $tokens = new \OCA\Grauphel\Storage\TokenStorage();
+        $tokens = new \OCA\Grauphel\Storage\TokenStorage($this->db);
         $res = new TemplateResponse('grauphel', 'tokens');
         $res->setParams(
             array(
@@ -293,7 +305,7 @@ class GuiController extends Controller
     protected function addGlobalVars(TemplateResponse $res)
     {
         $params = $res->getParams();
-        $params['date']   = \OC::$server->getDateTimeFormatter();
+        $params['date']   = $this->dateFormatter;
         $params['urlGen'] = $this->urlGen;
         $res->setParams($params);
     }
@@ -345,7 +357,7 @@ class GuiController extends Controller
 
         $username = $this->user->getUid();
         $notes  = $this->getNotes();
-        $tokens = new \OCA\Grauphel\Storage\TokenStorage();
+        $tokens = new \OCA\Grauphel\Storage\TokenStorage($this->db);
 
         $nav = new \OCP\Template('grauphel', 'indexStats', '');
         $nav->assign('notes', count($notes->loadNotesOverview()));
@@ -379,7 +391,7 @@ class GuiController extends Controller
     protected function getNotes()
     {
         $username = $this->user->getUid();
-        $notes  = new \OCA\Grauphel\Storage\NoteStorage($this->urlGen);
+        $notes  = new \OCA\Grauphel\Storage\NoteStorage($this->urlGen, $this->db);
         $notes->setUsername($username);
         return $notes;
     }

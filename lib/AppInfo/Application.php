@@ -7,6 +7,10 @@ use \OCA\Grauphel\Tools\Dependencies;
 use \OCP\AppFramework\Bootstrap\IBootContext;
 use \OCP\AppFramework\Bootstrap\IBootstrap;
 use \OCP\AppFramework\Bootstrap\IRegistrationContext;
+use \OCP\IDBConnection;
+use \OCP\IDateTimeFormatter;
+use \OCP\IURLGenerator;
+use \OCP\IUserSession;
 
 class Application extends App implements IBootstrap
 {
@@ -19,12 +23,12 @@ class Application extends App implements IBootstrap
 	\OCP\Util::addscript('grauphel', 'loader');
     }
 
-    public function register(IRegistrationContext $context): void 
+    public function register(IRegistrationContext $context): void
     {
         $context->registerService(
             'Session',
             function($c) {
-                return $c->query('ServerContainer')->getUserSession();
+                return $c->get(IUserSession::class);
             }
         );
 
@@ -34,20 +38,25 @@ class Application extends App implements IBootstrap
         $context->registerService(
             'ApiController',
             function($c) {
-                Dependencies::get()->urlGen
-                    = $c->query('ServerContainer')->getURLGenerator();
+                Dependencies::init(
+                    $c->get(IDBConnection::class),
+                    $c->get(IURLGenerator::class)
+                );
                 return new \OCA\Grauphel\Controller\ApiController(
                     $c->query('AppName'),
                     $c->query('Request'),
-                    $c->query('Session')->getUser()
+                    $c->query('Session')->getUser(),
+                    $c->get(IDBConnection::class)
                 );
             }
         );
         $context->registerService(
             'OauthController',
             function($c) {
-                Dependencies::get()->urlGen
-                    = $c->query('ServerContainer')->getURLGenerator();
+                Dependencies::init(
+                    $c->get(IDBConnection::class),
+                    $c->get(IURLGenerator::class)
+                );
                 return new \OCA\Grauphel\Controller\OauthController(
                     $c->query('AppName'),
                     $c->query('Request'),
@@ -58,19 +67,27 @@ class Application extends App implements IBootstrap
         $context->registerService(
             'GuiController',
             function($c) {
+                Dependencies::init(
+                    $c->get(IDBConnection::class),
+                    $c->get(IURLGenerator::class)
+                );
                 return new \OCA\Grauphel\Controller\GuiController(
                     $c->query('AppName'),
                     $c->query('Request'),
                     $c->query('Session')->getUser(),
-                    $c->query('ServerContainer')->getURLGenerator()
+                    $c->get(IURLGenerator::class),
+                    $c->get(IDateTimeFormatter::class),
+                    $c->get(IDBConnection::class)
                 );
             }
         );
         $context->registerService(
             'NotesController',
             function($c) {
-                Dependencies::get()->urlGen
-                    = $c->query('ServerContainer')->getURLGenerator();
+                Dependencies::init(
+                    $c->get(IDBConnection::class),
+                    $c->get(IURLGenerator::class)
+                );
                 return new \OCA\Grauphel\Controller\NotesController(
                     $c->query('AppName'),
                     $c->query('Request'),
@@ -81,8 +98,10 @@ class Application extends App implements IBootstrap
         $context->registerService(
             'TokenController',
             function($c) {
-                Dependencies::get()->urlGen
-                    = $c->query('ServerContainer')->getURLGenerator();
+                Dependencies::init(
+                    $c->get(IDBConnection::class),
+                    $c->get(IURLGenerator::class)
+                );
                 return new \OCA\Grauphel\Controller\TokenController(
                     $c->query('AppName'),
                     $c->query('Request'),
@@ -91,7 +110,6 @@ class Application extends App implements IBootstrap
             }
         );
 
-	
         $context->registerSearchProvider('OCA\Grauphel\Search\Provider');
     }
 
