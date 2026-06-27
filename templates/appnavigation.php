@@ -1,3 +1,5 @@
+<?php script('grauphel', 'grauphel'); ?>
+
 <div id="app-navigation">
   <ul>
     <?php foreach ($_['tags'] as $tag) { ?>
@@ -7,7 +9,7 @@
 
   <div id="app-settings">
     <div id="app-settings-header">
-      <button class="settings-button" data-apps-slide-toggle="#app-settings-content"></button>
+      <button type="button" class="settings-button"></button>
     </div>
     <div id="app-settings-content" style="display: none;">
       <ul>

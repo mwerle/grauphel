@@ -1,7 +1,7 @@
 <?php style('grauphel', 'grauphel'); ?>
 
 <?php /** @var $l OC_L10N */ ?>
-<?php $_['appNavigation']->printPage(); ?>
+<?php echo $_['appNavigation']; ?>
 
 <div id="app-content" class="content">
   <div id="searchresults" class="hidden"></div>
@@ -13,7 +13,7 @@
     never synced to this server before.
   </p>
 
-  <?php isset($_['stats']) && $_['stats']->printPage(); ?>
+  <?php if (isset($_['stats'])) { echo $_['stats']; } ?>
 
   <h2>Reset database</h2>
   <?php if ($_['reset'] === true) { ?>

@@ -315,9 +315,11 @@ class GuiController extends Controller
         $nav = new \OCP\Template('grauphel', 'appnavigation', '');
         $nav->assign('apiroot', $this->getApiRootUrl());
         $nav->assign('tags', array());
+        $nav->assign('urlGen', $this->urlGen);
+        $nav->assign('isLoggedIn', $this->user !== null);
 
         $params = $res->getParams();
-        $params['appNavigation'] = $nav;
+        $params['appNavigation'] = $nav->fetchPage();
         $res->setParams($params);
 
         if ($this->user === null) {
@@ -366,7 +368,7 @@ class GuiController extends Controller
         $nav->assign('urlGen', $this->urlGen);
 
         $params = $res->getParams();
-        $params['stats'] = $nav;
+        $params['stats'] = $nav->fetchPage();
         $res->setParams($params);
     }
 
