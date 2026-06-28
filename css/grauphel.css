@@ -91,6 +91,32 @@
     text-align: center;
 }
 
+/* Navigation list */
+.app-grauphel #app-navigation {
+	display: flex;
+	justify-content: center;
+}
+.app-navigation-header {
+	background-color: var(--color-background-dark);
+	text-align: center;
+	font-size: larger;
+}
+.app-navigation-list {
+	height: 100%;
+}
+.app-navigation-entry {
+    border-radius: 0.25rem;
+}
+.app-navigation-entry:hover {
+	background-color: var(--color-primary-element-light-hover);
+}
+.app-navigation-entry a {
+	display: block;
+	width: 100%;
+}
+.selected {
+	background-color: var(--color-primary-light);
+}
 
 /* make the settings menu nicer */
 .app-grauphel #app-settings {
@@ -182,7 +208,7 @@ table.table thead th {
 }
 
 table.table th, table.table td, #searchresults td {
-    border-bottom:1px solid var(--color-border-dark)
+    border-bottom:1px solid var(--color-border-dark);
     text-align:left;
     font-weight:normal;
 }
