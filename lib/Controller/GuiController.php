@@ -153,6 +153,7 @@ class GuiController extends Controller
 
         $this->addNavigation($res, $selectedRawtag);
         $this->addGlobalVars($res);
+
         return $res;
     }
 
@@ -252,27 +253,6 @@ class GuiController extends Controller
         );
         $this->addGlobalVars($res);
         $this->addNavigation($res, null);
-
-        return $res;
-    }
-
-    /**
-     * Show the app settings page
-     *
-     * @NoAdminRequired
-     * @NoCSRFRequired
-     */
-    public function settings()
-    {
-        $res = new TemplateResponse('grauphel', 'settings');
-        $res->setParams(
-            array(
-                'isLoggedIn' => $this->user !== null,
-            )
-        );
-        $this->addGlobalVars($res);
-        $this->addNavigation($res, null);
-        $this->addStats($res);
 
         return $res;
     }

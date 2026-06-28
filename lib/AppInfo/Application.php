@@ -20,7 +20,6 @@ class Application extends App implements IBootstrap
     {
         parent::__construct('grauphel', $urlParams);
 
-	\OCP\Util::addscript('grauphel', 'loader');
     }
 
     public function register(IRegistrationContext $context): void
@@ -111,6 +110,16 @@ class Application extends App implements IBootstrap
         );
 
         $context->registerSearchProvider('OCA\Grauphel\Search\Provider');
+
+        $context->registerEventListener(
+            \OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent::class,
+            function (\OCP\AppFramework\Http\Events\BeforeTemplateRenderedEvent $event) {
+                // Ensures we only load the script for web templates, not API calls
+                if ($event->getApp() === 'grauphel') {
+                    \OCP\Util::addScript('grauphel', 'loader');
+                }
+            }
+        );
     }
 
     public function boot(IBootContext $context): void {}

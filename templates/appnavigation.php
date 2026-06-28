@@ -22,11 +22,19 @@
 
   <!-- Settings button -->
   <div id="app-settings">
-    <ul>
-      <li><div id="app-settings-header">
-        <a href="<?php p($_['urlGen']->linkToRoute('grauphel.gui.settings')); ?>"
-           class="settings-button" aria-label="Grauphel settings">Grauphel settings</a>
-      </div></li>
-    </ul>
+    <div id="app-settings-header">
+      <button class="settings-button" data-apps-slide-toggle="#app-settings-content">
+        Grauphel settings
+      </button>
+    </div>
+    <div id="app-settings-content">
+      <ul>
+        <li><a href="<?php p($_['urlGen']->linkToRoute('grauphel.gui.index')); ?>">Info and stats</a></li>
+        <?php if ($_['isLoggedIn']) { ?>
+          <li><a href="<?php p($_['urlGen']->linkToRoute('grauphel.gui.tokens')); ?>">Manage access tokens</a></li>
+          <li><a href="<?php p($_['urlGen']->linkToRoute('grauphel.gui.database')); ?>">Manage database</a></li>
+        <?php } ?>
+      </ul>
+    </div>
   </div>
 </div>

@@ -138,14 +138,6 @@ return [
             'action' => 'databaseReset',
         ],
         [
-            'name' => 'gui#settings',
-            'url' => '/settings',
-            'verb' => 'GET',
-            'controller' => 'Gui',
-            'action' => 'settings',
-        ],
-
-        [
             'name' => 'token#delete',
             'url' => '/tokens/{username}/{tokenKey}',
             'verb' => 'DELETE',
