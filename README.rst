@@ -47,11 +47,10 @@ __ https://github.com/tomboy-notes/tomdroid
 
 Known working versions
 ======================
-grauphel 1.0.0 is known to work with:
+grauphel 2.0.0 is known to work with:
 
-* Tomboy 1.15.2, Linux
-* Tomboy 1.15.1, Windows
-* Tomdroid 0.7.5, Android 4.4.1
+* Tomboy Reborn 1.0.0, Linux
+* Tomdroid 0.8.0, Android 16
 
 See the HowTo__ document for client-specific configuration instructions.
 
