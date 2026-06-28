@@ -136,20 +136,20 @@ class OAuth
 
             $token = $this->tokens->load('access', $provider->token);
             if ($token->user != $username) {
-                errorOut('Invalid user');
+                throw new OAuthException('Invalid user', OAUTH_TOKEN_REJECTED);
             }
         } catch (\OAuthException $e) {
-            $this->error($e);
+            throw $e;
         }
     }
 
     public function error(\OAuthException $e)
     {
-        header('HTTP/1.0 400 Bad Request');
-        //header('Content-type: application/x-www-form-urlencoded');
-        echo \OAuthProvider::reportProblem($e);
-        //var_dump($e);
-        exit(1);
+        $response = new \OCP\AppFramework\Http\Response();
+        $response->setStatus(\OCP\AppFramework\Http\STATUS_BAD_REQUEST);
+        $response->addHeader('Content-Type', 'application/x-www-form-urlencoded');
+        $response->setContent(\OAuthProvider::reportProblem($e));
+        return $response;
     }
 
     /**

@@ -40,9 +40,6 @@ class GuiController extends Controller
         parent::__construct($appName, $request);
         $this->user   = $user;
         $this->urlGen = $urlGen;
-
-        //default http header: we assume something is broken
-        header('HTTP/1.0 500 Internal Server Error');
     }
 
     /**
@@ -169,11 +166,12 @@ class GuiController extends Controller
         $rawtag = $this->unescapeTagFromUrl($rawtag);
         $notes = $this->getNotes()->loadNotesOverview(null, $rawtag, true);
 
-        if (!isset($_GET['sortby'])) {
-            $_GET['sortby'] = 'title';
+        $sortby = $this->request->getParam('sortby');
+        if ($sortby === null || $sortby === '') {
+            $sortby = 'title';
         }
 
-        switch ($_GET['sortby']) {
+        switch ($sortby) {
         case 'title':
             usort(
                 $notes,
@@ -255,7 +253,12 @@ class GuiController extends Controller
     public function database($reset = null)
     {
         $res = new TemplateResponse('grauphel', 'gui-database');
-        $res->setParams(array('reset' => $reset));
+        $res->setParams(
+            array(
+                'reset' => $reset,
+                'requesttoken' => '',
+            )
+        );
         $this->addNavigation($res, null);
         $this->addStats($res);
 
@@ -271,7 +274,8 @@ class GuiController extends Controller
     public function databaseReset()
     {
         $reset = false;
-        if ($_POST['username'] != '' && $_POST['username'] == $this->user->getUid()) {
+        $username = $this->request->getParam('username');
+        if (is_string($username) && $username !== '' && $username === $this->user->getUid()) {
             $notes = $this->getNotes();
             $notes->deleteAll();
             $notes->deleteSyncData();
@@ -290,7 +294,7 @@ class GuiController extends Controller
     {
         $params = $res->getParams();
         $params['date']   = \OC::$server->getDateTimeFormatter();
-        $params['urlGen'] = \OC::$server->getURLGenerator();
+        $params['urlGen'] = $this->urlGen;
         $res->setParams($params);
     }
 
@@ -347,6 +351,7 @@ class GuiController extends Controller
         $nav->assign('notes', count($notes->loadNotesOverview()));
         $nav->assign('syncrev', $notes->loadSyncData()->latestSyncRevision);
         $nav->assign('tokens', count($tokens->loadForUser($username, 'access')));
+        $nav->assign('urlGen', $this->urlGen);
 
         $params = $res->getParams();
         $params['stats'] = $nav;

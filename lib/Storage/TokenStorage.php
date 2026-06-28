@@ -185,7 +185,7 @@ class TokenStorage
     protected function fromDb($tokenRow)
     {
         $token = new Token();
-        $token->type     = $tokenRow['token_user'];
+        $token->type     = $tokenRow['token_type'];
         $token->tokenKey = $tokenRow['token_key'];
         $token->secret   = $tokenRow['token_secret'];
         $token->user     = $tokenRow['token_user'];
