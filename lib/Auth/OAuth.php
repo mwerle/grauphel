@@ -143,15 +143,6 @@ class OAuth
         }
     }
 
-    public function error(\OAuthException $e)
-    {
-        $response = new \OCP\AppFramework\Http\Response();
-        $response->setStatus(\OCP\AppFramework\Http\STATUS_BAD_REQUEST);
-        $response->addHeader('Content-Type', 'application/x-www-form-urlencoded');
-        $response->setContent(\OAuthProvider::reportProblem($e));
-        return $response;
-    }
-
     /**
      * Get a new oauth provider instance.
      * Used to work around the fastcgi bug in oauthprovider.
